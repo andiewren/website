@@ -11,7 +11,7 @@ if not os.path.isdir('./html'):
 # symlink fonts and images
 if not os.path.isdir('./html/fonts'):
     os.system('cd html; ln -s ../fonts fonts; cd ../')
-if not os.path.isdir('./html/images'):
+if not os.path.isdir('./html/images') and os.path.isdir('./images'):
     os.system('cd html; ln -s ../images images; cd ../')
 
 # find all html files
