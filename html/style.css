@@ -1,0 +1,73 @@
+@font-face {font-family: "redalert"; src: url("./fonts/redalert.ttf");}
+@font-face {font-family: "term"; src: url("./fonts/_decterm.ttf");}
+@font-face {font-family: "alagard"; src: url("./fonts/alagard.ttf");}
+@font-face {font-family: "sd"; src: url("./fonts/SD-Auto-Pilot.ttf");}
+
+
+:root {
+  image-rendering: pixelated;
+
+  --site-bg:#CFE4B8;
+  --site-yellow:#F8CD77;
+  --text-dark:#1d2e0f;
+  --text-hover:#90a927;
+  --site-green2: #1f5242;
+
+}
+
+body {
+  font-family: "term", monospace;
+  font-weight: normal;
+  background-color: var(--site-bg);
+  color: var(--text-dark);
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 2.5rem;
+  text-align: center;
+  letter-spacing: 0.4rem;
+  font-family: "alagard"
+}
+
+#titlepanel {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+#titlepanel h1 {
+  margin: 0px;
+}
+
+#titlepanel p {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 0px;
+}
+
+#mainnav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 500px;
+  border-image:  url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFQAAABUCAYAAAAcaxDBAAACA0lEQVR4Aeya0U3EMBQEAz1QABXQfxlUQAEUAd+MdbIuGcDJDdJ9rGyv/cZ7j0i55+3Ov9e3l69H/sxw3Q10Zvjo4wGVExDQ1YB+vH8+nfkz48na+P+D60soiRzUAT0IkMsDSiIH9QCUPYKa+83GOX81zR5Jzfpm4wPQ1Qo+23kCKt9YQG2gsx7BnrFt248jcJx+PyY/gCih8iUHNKAyAdnuedYD7+2J9JPPu7xdX3n5igIaUJmAbDcklD2QWt7/cnYD0MtV+McFBVQGHtCTApWPva5dCZXvJqABlQnIdiU0oDIB2a6EBlQmINuV0IDKBGS7EhpQmYBsNySU75Couf9snPPv0KecOgA9ZRULHTqg8mUE1AbKHsh3SNTcn+P04/yr6xIq33BAAyoTkO36bZMNVPZ7eLt6qByBgP42UD5XUsv723b/7ldC5SsIaEBlArJdCQ2oTEC2K6EBlQnIdiU0oDIB2a6EBlQmINuV0G1TkQZUxbltAQ2oTEC2GxLK9+rU3H82zvlX1wPQqxf82/UFVCYcUBsoeyDfIVFzf47Tj/OvrkuofMMBDahMQLbrt037gN5c1Vf+Jpp9AwHdx+3mqoDeRLNvYADK50rqfdusu4rPzdSsfzY+AF239HOcLKDyPQV0NaDsKWfTM56shz2V60soiRzUAT0IkMsDSiIH9TcAAAD//y4KJEsAAAAGSURBVAMAc6fZx0YlBrwAAAAASUVORK5CYII=") 28 /  28px / 0 round;
+  border-width:  28px;
+  border-style:  solid;
+}
+
+.navitem {
+  padding: 15px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+a {
+  color: var(--text-dark);
+}
+
+a:hover {
+  color: var(--text-hover);
+}
