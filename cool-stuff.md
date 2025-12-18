@@ -3,6 +3,7 @@
 ## web tools
 
 - [broider - maxbittker](https://github.com/MaxBittker/broider)
+- [dither me this](https://doodad.dev/dither-me-this/)
 :::
 
 ::: sublist
