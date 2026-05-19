@@ -1,3 +1,6 @@
+---
+template: base-template
+---
 ::::: mainpanel
 ::: sublist
 ## web tools

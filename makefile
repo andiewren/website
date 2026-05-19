@@ -2,4 +2,6 @@ html:
 	python3 make.py
 
 clean:
-	rm -r html/
+	if [ -d "html" ]; then \
+		rm -r html; \
+	fi;
