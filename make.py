@@ -59,7 +59,8 @@ if not os.path.isdir('./html/images') and os.path.isdir('./images'):
     os.system('cd html; ln -s ../images images; cd ../')
 
 # find all html files
-nochange = {f for f in files if f[-5:]=='.html' or f[-4:]=='.css'}
+nochangeext = ['html', 'css', 'xml']
+nochange = {f for f in files if f.split('.')[-1] in nochangeext}
 templates_f = {Path(f) for f in nochange if 'template' in f}
 nochange = nochange.difference(set(templates_f))
 
@@ -68,6 +69,7 @@ for f in nochange:
 
 # file names to convert to html
 md = [Path(f) for f in files if f[-3:]=='.md']
+md.sort()
 
 # print(md)
 
@@ -75,7 +77,6 @@ md = [Path(f) for f in files if f[-3:]=='.md']
 templates = dict()
 for t in templates_f:
     templates[t] = t.read_text()
-
 
 notesdiv = ''
 
