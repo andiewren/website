@@ -58,11 +58,13 @@ if not os.path.isdir('./html/fonts'):
 if not os.path.isdir('./html/images') and os.path.isdir('./images'):
     os.system('cd html; ln -s ../images images; cd ../')
 
-# find all html files
+# find all html/css + feed files
 nochangeext = ['html', 'css', 'xml']
 nochange = {f for f in files if f.split('.')[-1] in nochangeext}
 templates_f = {Path(f) for f in nochange if 'template' in f}
 nochange = nochange.difference(set(templates_f))
+
+print(nochange)
 
 for f in nochange:
     os.system(f'cp {f} ./html/{f}')
@@ -107,7 +109,6 @@ for f in md:
 with open(f'./html/notes.html', 'r+') as f:
     notes_html = f.read()
     notes_html = re.sub(r'<!-- postcards -->', notesdiv, notes_html)
-    print(notes_html)
     f.seek(0)
     f.write(notes_html)
     f.truncate()

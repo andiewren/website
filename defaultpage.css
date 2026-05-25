@@ -2,6 +2,8 @@
 @font-face {font-family: "term"; src: url("./fonts/_decterm.ttf");}
 @font-face {font-family: "alagard"; src: url("./fonts/alagard.ttf");}
 @font-face {font-family: "sd"; src: url("./fonts/SD-Auto-Pilot.ttf");}
+@font-face {font-family: "slkscr"; src: url("./fonts/slkscr.ttf");}
+
 
 
 :root {
@@ -20,6 +22,12 @@ body {
   font-weight: normal;
   background-color: var(--site-bg);
   color: var(--text-dark);
+  margin: 0 auto;
+  max-width: 36em;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 40px;
+  padding-bottom: 50px;
 }
 
 h1 {
@@ -58,6 +66,11 @@ h1 {
   border-style:  solid;
 }
 
+
+.mainpanel {
+  margin-top: 15px;
+}
+
 a {
   color: var(--text-dark);
 }
@@ -68,4 +81,11 @@ a:hover {
 
 .sublist {
   padding-top: 15px;
+}
+
+#back {
+  font-family: "alagard", monospace;
+  position:absolute;
+  top: 10px;
+  left: 10px;
 }

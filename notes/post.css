@@ -15,11 +15,6 @@ body {
   hyphens: auto;
   overflow-wrap: break-word;
   text-rendering: optimizeLegibility;
-  font-kerning: normal;
-}
-
-#back {
-  font-family: "alagard", monospace;
 }
 
 @media (max-width: 600px) {
@@ -51,12 +46,7 @@ body {
 p {
   margin: 1em 0;
 }
-a {
-  color: #1a1a1a;
-}
-a:visited {
-  color: #1a1a1a;
-}
+
 img {
   max-width: 100%;
 }

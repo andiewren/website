@@ -1,15 +1,14 @@
 ---
 template: base-template
+title: Cool Stuff
 ---
-::::: mainpanel
-::: sublist
+# Findings
+
 ## web tools
 
 - [broider - maxbittker](https://github.com/MaxBittker/broider)
 - [dither me this](https://doodad.dev/dither-me-this/)
-:::
 
-::: sublist
 ## design influences
 
 - [ribo.zone](https://ribo.zone)
@@ -19,10 +18,7 @@ template: base-template
 - [erik bernacchi](https://eeerik.com)
 - [aidan quinlan](https://aidanquinlan.net)
 - [the school of poetic computation](https://sfpc.study)
-:::
 
-::: sublist
 ## misc
 - [click click click](https://studiomoniker.com/projects/click-click-click)
-:::
-:::::
+
