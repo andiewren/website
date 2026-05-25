@@ -18,29 +18,24 @@ def get_meta(f:Path) -> str:
     meta = dict()
     for l in m.group(1).split('\n'):
         try: 
-            print(l.split(r':\s'))
+            # print(l.split(r': '))
             meta[l.split(': ')[0]] = l.split(': ')[1]
         except IndexError as e:
             pass
+    
+    meta['path'] = re.sub('.md', '.html', './' + str(f))
 
     return meta
 
 def fill_with_meta(txt:str, meta:dict) -> str:
     for k in meta:
-        txt = re.sub('<!-- ' + k + ' -->', meta[k], txt)
+        txt = re.sub('<!-- ' + k + ' -->', meta[k], txt.strip())
 
     return txt
 
 cwd = Path.cwd()
 
 include_subdirs = ['notes']
-
-# files = os.listdir()
-#
-# for d in include_subdirs:
-#     files += os.listdir(d)
-#
-# print(files)
 
 p = Path('.')
 pd = p.glob('*')
@@ -81,12 +76,14 @@ templates = dict()
 for t in templates_f:
     templates[t] = t.read_text()
 
-print(templates)
+
+notesdiv = ''
 
 for f in md:
     print(f)
     # get metadata from markdown file
     meta = get_meta(f)
+    # print(meta)
     
     # pandoc, shove together
     fragment = subprocess.check_output(['pandoc', f, '-f', 'markdown', '-t', 'html']).decode("utf-8")
@@ -96,6 +93,21 @@ for f in md:
     html = fill_with_meta(html, meta)
 
     with open(f'./html/{f.parent / f.stem}.html', 'w') as outf:
-        outf.write(html) 
+        outf.write(html)
 
+    # folder specific instructions
+    folder = str(f).split('/')[0]
+
+    if folder == "notes":
+        # add to main notes page
+       notesdiv += fill_with_meta(templates[Path('./notes/post-snip-template.html')], meta)
+
+# finish notes page
+with open(f'./html/notes.html', 'r+') as f:
+    notes_html = f.read()
+    notes_html = re.sub(r'<!-- postcards -->', notesdiv, notes_html)
+    print(notes_html)
+    f.seek(0)
+    f.write(notes_html)
+    f.truncate()
 

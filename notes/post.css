@@ -17,6 +17,11 @@ body {
   text-rendering: optimizeLegibility;
   font-kerning: normal;
 }
+
+#back {
+  font-family: "alagard", monospace;
+}
+
 @media (max-width: 600px) {
   body {
     font-size: 0.9em;
