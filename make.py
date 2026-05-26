@@ -42,7 +42,7 @@ class Site():
             dp = p / d
             allfiles += [f for f in dp.glob('*') if f.is_file()]
 
-        nochangeext = ['.css', '.xml']
+        nochangeext = ['.css', '.xml', '.ico', '.png']
         nochange = {f for f in allfiles if f.suffix in nochangeext}
         htmls = {f for f in allfiles if f.suffix == '.html'}
         templates_f = {Path(f) for f in htmls if 'template' in str(f)}
