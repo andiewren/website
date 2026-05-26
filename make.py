@@ -3,113 +3,187 @@
 
 import os
 import subprocess
-import re
 from pathlib import Path
+import re
 
-def get_meta(f:Path) -> str:
-    txt = f.read_text()
-    p = re.compile(r"^---\n([\s\S]*)\n---")
-    m = p.search(txt)
-    
-    if not m:
-        return None
-    
-    # SHOULD only be one match, assume that's true
-    meta = dict()
-    for l in m.group(1).split('\n'):
-        try: 
-            # print(l.split(r': '))
-            meta[l.split(': ')[0]] = l.split(': ')[1]
-        except IndexError as e:
-            pass
-    
-    meta['path'] = re.sub('.md', '.html', './' + str(f))
-
-    return meta
-
-def fill_with_meta(txt:str, meta:dict) -> str:
+def dict_fill(txt:str, meta:dict) -> str:
     for k in meta:
         txt = re.sub('<!-- ' + k + ' -->', meta[k], txt.strip())
 
     return txt
 
-cwd = Path.cwd()
+class Site():
+    def __init__(self, homedir, incldirs):
+        self.homedir = homedir
+        self.incldirs = incldirs
+        
+        # get relevant file paths
+        self.nochange, htmls, template_f, self.mdfiles = self.get_files()
+        # print(self.nochange)
 
-include_subdirs = ['notes']
+        # read in templates
+        self.templates = self.read_templates(template_f)
+                
+        # process markdown files
+        self.pages = []
+        for p in htmls:
+            self.add_page(p)
 
-p = Path('.')
-pd = p.glob('*')
-files = [str(f) for f in pd if f.is_file()]
+        for p in self.mdfiles:
+            self.add_md(p, self.templates) 
 
-for d in include_subdirs:
-    dp = p / d
-    files += [str(f) for f in dp.glob('*')]
 
-# make html dir structure if does not exist
-if not os.path.isdir('./html'):
-    os.system('mkdir html')
-for d in include_subdirs:
-    if not os.path.isdir('./html/' + d):
-        os.system('mkdir html/' + d)
+    def get_files(self):
+        p = Path(self.homedir)
+        pd = p.glob('*')
+        allfiles = [f for f in pd if f.is_file()]
+        
+        for d in self.incldirs:
+            dp = p / d
+            allfiles += [f for f in dp.glob('*') if f.is_file()]
 
-# symlink fonts and images
-if not os.path.isdir('./html/fonts'):
-    os.system('cd html; ln -s ../fonts fonts; cd ../')
-if not os.path.isdir('./html/images') and os.path.isdir('./images'):
-    os.system('cd html; ln -s ../images images; cd ../')
+        nochangeext = ['.css', '.xml']
+        nochange = {f for f in allfiles if f.suffix in nochangeext}
+        htmls = {f for f in allfiles if f.suffix == '.html'}
+        templates_f = {Path(f) for f in htmls if 'template' in str(f)}
+        htmls = htmls.difference(templates_f)
+        
+        # print(f"nochange: {nochange}")
+        # print(f"templates_f: {templates_f}")
+        
+        mdfiles = [Path(f) for f in allfiles if f.suffix =='.md']
+        mdfiles.sort()
 
-# find all html/css + feed files
-nochangeext = ['html', 'css', 'xml']
-nochange = {f for f in files if f.split('.')[-1] in nochangeext}
-templates_f = {Path(f) for f in nochange if 'template' in f}
-nochange = nochange.difference(set(templates_f))
-
-print(nochange)
-
-for f in nochange:
-    os.system(f'cp {f} ./html/{f}')
-
-# file names to convert to html
-md = [Path(f) for f in files if f[-3:]=='.md']
-md.sort()
-
-# print(md)
-
-# load templates
-templates = dict()
-for t in templates_f:
-    templates[t] = t.read_text()
-
-notesdiv = ''
-
-for f in md:
-    print(f)
-    # get metadata from markdown file
-    meta = get_meta(f)
-    # print(meta)
+        return nochange, htmls, templates_f, mdfiles
     
-    # pandoc, shove together
-    fragment = subprocess.check_output(['pandoc', f, '-f', 'markdown', '-t', 'html']).decode("utf-8")
-    html = re.sub(r'<!-- replace here -->', fragment, templates[Path(str(f.parent) +  '/' + meta['template'] + '.html')])
+    def read_templates(self, t_paths):
+        templates = dict()
+        for t in t_paths:
+            templates[t] = t.read_text()
 
-    # subsitute out other things in metadata
-    html = fill_with_meta(html, meta)
+        return templates
+    
+    def make_output_structure(self):
+        if not os.path.isdir('./html'):
+            os.system('mkdir html')
+        for d in self.incldirs:
+            if not os.path.isdir('./html/' + d):
+                os.system('mkdir html/' + d)
 
-    with open(f'./html/{f.parent / f.stem}.html', 'w') as outf:
-        outf.write(html)
+        # symlink fonts and images
+        if not os.path.isdir('./html/fonts'):
+            os.system('cd html; ln -s ../fonts fonts; cd ../')
+        if not os.path.isdir('./html/images') and os.path.isdir('./images'):
+            os.system('cd html; ln -s ../images images; cd ../')
+        
+        for f in self.nochange:
+            os.system(f'cp {f} ./html/{f}')
 
-    # folder specific instructions
-    folder = str(f).split('/')[0]
+        
+    def add_page(self, path):
+        if isinstance(path, str):
+            path = Path(path)
 
-    if folder == "notes":
-        # add to main notes page
-       notesdiv += fill_with_meta(templates[Path('./notes/post-snip-template.html')], meta)
+        self.pages.append(Page(path))
 
-# finish notes page
-with open(f'./html/notes.html', 'r+') as f:
-    notes_html = f.read()
-    notes_html = re.sub(r'<!-- postcards -->', notesdiv, notes_html)
-    f.seek(0)
-    f.write(notes_html)
-    f.truncate()
+    def add_md(self, path, templates):
+        if isinstance(path, str):
+            path = Path(path)
+        
+        p = mdPage(path) 
+        t = self.templates[Path(str(path.parent) +  '/' + p.meta['template'] + '.html')]
+        p.build(t)
 
+        self.pages.append(p)
+
+    def build(self):
+        self.make_output_structure()
+        
+        for page in self.pages:
+            page.write(Path('./html/'))
+
+        # process agg/gallery pages
+        notes_p = [p for p in self.pages if str(p.path.parent) == 'notes']
+        notesdiv = ''
+        snip_template = Path('./notes/post-snip-template.html')
+        for p in notes_p:
+            notesdiv += dict_fill(self.templates[snip_template], p.meta)
+        
+        with open(f'./html/notes.html', 'r+') as f:
+            notes_html = f.read()
+            notes_html = re.sub(r'<!-- postcards -->', notesdiv, notes_html)
+            f.seek(0)
+            f.write(notes_html)
+            f.truncate()
+
+        
+
+class Page():
+    def __init__(self, path):
+        if isinstance(path, str):
+            path = Path(path)
+        self.path = path
+        self.type = self.path.suffix
+        self.name = self.path.stem
+        self.original = self.path.read_text()
+
+    def __str__(self):
+        return self.name
+        
+    def get_html(self):
+        return self.original
+
+    def write(self, build_p):
+        out_p = Path(str(build_p / self.path.parent / self.path.stem) + '.html')
+        out_p.write_text(self.get_html())
+
+        # print(f"wrote {self.path} -> {out_p}")
+
+class mdPage(Page):
+    def __init__(self, path):
+        Page.__init__(self, path)
+        self.built_html = None
+        self.meta = self.get_metadata()
+
+    def get_html(self):
+        return self.built_html
+        
+    def build(self, template):
+        self.template = template
+        # pandoc
+        fragment = subprocess.check_output(['pandoc', self.path, '-f', 'markdown', '-t', 'html']).decode("utf-8")
+        html = re.sub(r'<!-- replace here -->', fragment, template)
+
+        # subsitute out other things in metadata
+        html = dict_fill(html, self.meta)
+
+        self.built_html = html
+
+    def get_metadata(self):
+        txt = self.path.read_text()
+        p = re.compile(r"^---\n([\s\S]*)\n---")
+        m = p.search(txt)
+        
+        if not m:
+            return None
+        
+        # SHOULD only be one match, assume that's true
+        meta = dict()
+        for l in m.group(1).split('\n'):
+            try: 
+                # print(l.split(r': '))
+                meta[l.split(': ')[0]] = l.split(': ')[1]
+            except IndexError as e:
+                pass
+        
+        meta['path'] = re.sub('.md', '.html', './' + str(self.path))
+
+        return meta
+
+
+if __name__ == "__main__":
+
+    site = Site('.', ['notes'])
+    # for p in site.pages:
+    #     print(str(p))
+    site.build()
