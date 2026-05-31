@@ -15,6 +15,10 @@
   --code-block:#ddf2c5;
 }
 
+/* html, body { */
+/*   cursor: url('./images/smallgreenarrow.cur'), auto !important; */
+/* } */
+
 body {
   font-family: "term", monospace;
   font-weight: normal;
@@ -73,8 +77,12 @@ a {
   color: var(--text-dark);
 }
 
-a:hover {
-  color: var(--text-hover);
+a:hover, a:focus { 
+	color: var(--text-hover);
+	text-decoration-style: wavy;
+	text-decoration-thickness: 1px;
+	background: rgb(0,0,0,0);
+
 }
 
 .sublist {

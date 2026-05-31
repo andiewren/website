@@ -42,7 +42,7 @@ class Site():
             dp = p / d
             allfiles += [f for f in dp.glob('*') if f.is_file()]
 
-        nochangeext = ['.css', '.xml', '.ico', '.png']
+        nochangeext = ['.css', '.xml', '.ico', '.png', '.cur']
         nochange = {f for f in allfiles if f.suffix in nochangeext}
         htmls = {f for f in allfiles if f.suffix == '.html'}
         templates_f = {Path(f) for f in htmls if 'template' in str(f)}
@@ -183,7 +183,7 @@ class mdPage(Page):
 
 if __name__ == "__main__":
 
-    site = Site('.', ['notes'])
+    site = Site('.', ['notes', 'images'])
     # for p in site.pages:
     #     print(str(p))
     site.build()
