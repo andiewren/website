@@ -68,6 +68,10 @@ h1 {
   border-style:  solid;
 }
 
+.sticker > img{
+  position: absolute;
+  z-index: -1;
+}
 
 .mainpanel {
   margin-top: 15px;
