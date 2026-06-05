@@ -16,6 +16,9 @@ body {
   overflow-wrap: break-word;
   text-rendering: optimizeLegibility;
 }
+h1 {
+  text-align-last: left;
+}
 
 @media (max-width: 600px) {
   body {
