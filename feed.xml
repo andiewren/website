@@ -1,11 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title> Andie Wren's Notes </title>
-    <description> Andie Wren's Notes </description>
-    <link>https://andiewren.com</link>
-    <atom:link href="https://andiewren.com/feed.xml" 
-      rel="self" type="application/rss+xml"/>
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <id>https://andiewren.com/notes</id>
+  <title>andie wren's notes</title>
+  <link href="https://andiewren.com/feed.xml" rel="self"/>
+  <link href="https://andiewren.com" rel="alternate"/>
+  <logo>./images/favicon.png</logo>
+  <updated>2026-06-04T23:45:00+00:00</updated>
 
-  </channel>
-</rss>
+  <entry>
+    <title> hello </title>
+    <link href="https://andiewren.com/notes/hello.html" />
+    <id>https://andiewren.com/notes/hello.html</id>
+    <updated>2026-06-04T23:45:00+00:00</updated>
+    <author>
+      <name>andie wren</name>
+    </author>
+  </entry>
+</feed>
