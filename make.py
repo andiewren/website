@@ -52,7 +52,7 @@ class Site():
         htmls = htmls.difference(templates_f)
         
         # print(f"nochange: {nochange}")
-        print(f"templates_f: {templates_f}")
+        # print(f"templates_f: {templates_f}")
         
         mdfiles = [Path(f) for f in allfiles if f.suffix =='.md']
         mdfiles.sort()

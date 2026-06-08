@@ -1,8 +1,8 @@
-@font-face {font-family: "redalert"; src: url("./fonts/redalert.ttf");}
-@font-face {font-family: "term"; src: url("./fonts/_decterm.ttf");}
-@font-face {font-family: "alagard"; src: url("./fonts/alagard.ttf");}
-@font-face {font-family: "sd"; src: url("./fonts/SD-Auto-Pilot.ttf");}
-@font-face {font-family: "slkscr"; src: url("./fonts/slkscr.ttf");}
+@font-face {font-family: "redalert"; src: url("/fonts/redalert.ttf");}
+@font-face {font-family: "term"; src: url("/fonts/_decterm.ttf");}
+@font-face {font-family: "alagard"; src: url("/fonts/alagard.ttf");}
+@font-face {font-family: "sd"; src: url("/fonts/SD-Auto-Pilot.ttf");}
+@font-face {font-family: "slkscr"; src: url("/fonts/slkscr.ttf");}
 
 :root {
   image-rendering: pixelated;
@@ -16,7 +16,7 @@
 }
 
 /* html, body { */
-/*   cursor: url('./images/smallgreenarrow.cur'), auto !important; */
+/*   cursor: url('/images/smallgreenarrow.cur'), auto !important; */
 /* } */
 
 body {

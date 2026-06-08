@@ -14,6 +14,6 @@ I also make bad art, largely of the fiber arts and fiber-arts-adjacent variety.
 
 ---
 
-![disability pride flag](../images/disabled.png)
-![genderqueer flag](../images/genderqueer.png)
-![trans flag](../images/trans.png)
+![disability pride flag](/images/disabled.png)
+![genderqueer flag](/images/genderqueer.png)
+![trans flag](/images/trans.png)
