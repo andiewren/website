@@ -5,6 +5,9 @@ import os
 import subprocess
 from pathlib import Path
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 def dict_fill(txt:str, meta:dict) -> str:
     for k in meta:
@@ -40,7 +43,7 @@ class Site():
         
         for d in self.incldirs:
             dp = p / d
-            allfiles += [f for f in dp.glob('*') if f.is_file()]
+            allfiles += [f for f in dp.glob('**/*') if f.is_file()]
 
         nochangeext = ['.css', '.xml', '.ico', '.png', '.cur']
         nochange = {f for f in allfiles if f.suffix in nochangeext}
@@ -49,7 +52,7 @@ class Site():
         htmls = htmls.difference(templates_f)
         
         # print(f"nochange: {nochange}")
-        # print(f"templates_f: {templates_f}")
+        print(f"templates_f: {templates_f}")
         
         mdfiles = [Path(f) for f in allfiles if f.suffix =='.md']
         mdfiles.sort()
@@ -59,6 +62,9 @@ class Site():
     def read_templates(self, t_paths):
         templates = dict()
         for t in t_paths:
+            if t in templates:
+                logger.warning(f"overwriting template: {t}")
+            templates[Path(t.name)] = t.read_text() 
             templates[t] = t.read_text()
 
         return templates
@@ -67,9 +73,13 @@ class Site():
         if not os.path.isdir('./html'):
             os.system('mkdir html')
         for d in self.incldirs:
-            if not os.path.isdir('./html/' + d):
-                os.system('mkdir html/' + d)
-
+            d = Path(d)
+            (Path('html') / d).mkdir()
+            for path in d.glob("**/*"):
+                target = Path('html') / path
+                if path.is_dir():
+                    target.mkdir()
+        
         # symlink fonts and images
         if not os.path.isdir('./html/fonts'):
             os.system('cd html; ln -s ../fonts fonts; cd ../')
@@ -90,8 +100,15 @@ class Site():
         if isinstance(path, str):
             path = Path(path)
         
-        p = mdPage(path) 
-        t = self.templates[Path(str(path.parent) +  '/' + p.meta['template'] + '.html')]
+        p = mdPage(path)
+
+        if Path(str(path.parent) +  '/' + p.meta['template'] + '.html') in templates:
+            t = self.templates[Path(str(path.parent) +  '/' + p.meta['template'] + '.html')]
+        elif Path(p.meta['template'] + '.html') in templates:
+            t = self.templates[Path(p.meta['template'] + '.html')]
+        else:
+            raise KeyError(f"cannot find template file {p.meta['template'] + '.html'} specified in {path}")
+
         p.build(t)
 
         self.pages.append(p)
@@ -183,7 +200,7 @@ class mdPage(Page):
 
 if __name__ == "__main__":
 
-    site = Site('.', ['notes', 'images', 'images/stickers'])
+    site = Site('.', ['notes'])
     # for p in site.pages:
     #     print(str(p))
     site.build()
