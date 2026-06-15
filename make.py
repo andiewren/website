@@ -120,7 +120,7 @@ class Site():
             page.write(Path('./html/'))
 
         # process agg/gallery pages
-        notes_p = [p for p in self.pages if str(p.path.parent) == 'notes']
+        notes_p = [p for p in self.pages if 'notes' in str(p.path.parent)]
         notesdiv = ''
         snip_template = Path('./notes/post-snip-template.html')
         for p in notes_p:
@@ -143,6 +143,8 @@ class Page():
         self.type = self.path.suffix
         self.name = self.path.stem
         self.original = self.path.read_text()
+        self.meta = self.get_metadata()
+        
 
     def __str__(self):
         return self.name
@@ -156,12 +158,18 @@ class Page():
 
         # print(f"wrote {self.path} -> {out_p}")
 
+    def get_metadata(self):
+        meta = dict()
+        meta['path'] = './' + str(self.path)
+        meta['title'] = re.search(r"<title>\s*(.*)\s*<\/title>", self.original).group(1)
+
+        return meta
+
 class mdPage(Page):
     def __init__(self, path):
         Page.__init__(self, path)
         self.built_html = None
-        self.meta = self.get_metadata()
-
+        
     def get_html(self):
         return self.built_html
         
