@@ -165,9 +165,8 @@ class Page():
         try:
             meta['title'] = re.search(r"<title>\s*(.*)\s*<\/title>", self.original).group(1)
         except Exception as e:
-            print(f"cannot pull title from {self.path}, setting title to 'post'")
-            print(f"{e}")
-            meta['title'] = "post"
+            print(f"cannot pull title from {self.path}, setting title to '{self.path.stem}'")
+            meta['title'] = str(self.path.stem)
 
         return meta
 
