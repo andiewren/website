@@ -19,17 +19,18 @@
 /*   cursor: url('/images/smallgreenarrow.cur'), auto !important; */
 /* } */
 
+html, body {
+  height: 100%;
+}
+
 body {
-  font-family: "term", monospace;
+  display: flex;
+  flex-direction: column;  font-family: "term", monospace;
   font-weight: normal;
   background-color: var(--site-bg);
   color: var(--text-dark);
-  margin: 0 auto;
-  max-width: 36em;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-top: 40px;
-  padding-bottom: 50px;
+  margin-right: 0px;
+  margin-left: 0px;
 }
 
 h1 {
@@ -101,8 +102,8 @@ a:hover, a:focus {
 }
 
 .foot {
+  flex-shrink: 0;
   text-align: center;
-  position:absolute;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -114,4 +115,14 @@ a:hover, a:focus {
 
 .foot > a {
   color: var(--site-bg);
+}
+
+.content {
+  flex: 1 0 auto;
+  margin: 0 auto;
+  max-width: 36em;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 40px;
+  padding-bottom: 50px;
 }

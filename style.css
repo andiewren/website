@@ -1,9 +1,10 @@
 @import url("../defaultpage.css");
 
-
 .navitem {
   padding: 15px;
   text-align: center;
   font-size: 1.5rem;
+  padding-left: 70px;
+  padding-right: 70px;
 }
 
