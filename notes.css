@@ -17,6 +17,6 @@ h2 {
   padding: 5px;
   padding-left:15px;
   background: var(--code-block);
-  width: inherit;
+  width: 500px;
 }
 
