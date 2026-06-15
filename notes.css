@@ -8,7 +8,6 @@ h2 {
 #postlist {
   margin-left: auto;
   margin-right: auto;
-  width: 500px;
 }
 
 .postcard {
@@ -18,5 +17,6 @@ h2 {
   padding: 5px;
   padding-left:15px;
   background: var(--code-block);
+  width: inherit;
 }
 
