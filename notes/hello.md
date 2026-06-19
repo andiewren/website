@@ -12,7 +12,7 @@ I am a scientific software engineer with a background in computational science a
 
 I also make bad art, largely of the fiber arts and fiber-arts-adjacent variety.
 
----
+<hr>
 
 ![disability pride flag](/images/disabled.png)
 ![genderqueer flag](/images/genderqueer.png)
