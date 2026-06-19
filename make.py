@@ -11,7 +11,9 @@ logger = logging.getLogger(__name__)
 
 def dict_fill(txt:str, meta:dict) -> str:
     for k in meta:
-        txt = re.sub('<!-- ' + k + ' -->', meta[k], txt.strip())
+        # filter out list elements, have to handle those differently if ever needed
+        if not isinstance(meta[k], list):
+            txt = re.sub('<!-- ' + k + ' -->', str(meta[k]), txt.strip())
 
     return txt
 
@@ -191,21 +193,28 @@ class mdPage(Page):
 
     def get_metadata(self):
         txt = self.path.read_text()
-        p = re.compile(r"^---\n([\s\S]*)\n---")
-        m = p.search(txt)
         
+        # SHOULD only be one match, assume that's true
+        m = re.findall(r"^---\n([\s\S]*)\n---\s", txt)[0]
+                
         if not m:
             return None
         
-        # SHOULD only be one match, assume that's true
         meta = dict()
-        for l in m.group(1).split('\n'):
-            try: 
-                # print(l.split(r': '))
-                meta[l.split(': ')[0]] = l.split(': ')[1]
-            except IndexError as e:
-                pass
-        
+        # pull all values in form key: value
+        for v in re.findall(r"^(.*):(?!\s*\n)\s*(.*$)", m, re.MULTILINE):
+            meta[v[0]] = v[1]
+
+        # pull all values in key: list form
+        p = re.compile(r"^(.*)[:]\s*\n(?:\s*- .+\n)+", re.MULTILINE)
+        l = re.finditer(p, m)
+        for a in l:
+            # remove the key line, rejoin together
+            li = "\n".join(a.group(0).split('\n')[1:])
+
+            # get list of anything after a dash on a line
+            meta[a.group(1)] = re.findall(r"\s*-\s(.*)\n", li)             
+
         meta['path'] = re.sub('.md', '.html', './' + str(self.path))
 
         return meta
