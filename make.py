@@ -121,12 +121,14 @@ class Site():
         for page in self.pages:
             page.write(Path('./html/'))
 
-        # process agg/gallery pages
+        # process agg/gallery pages (just notes rn)
         notes_p = [p for p in self.pages if 'notes' in str(p.path.parent)]
         notesdiv = ''
         snip_template = Path('./notes/post-snip-template.html')
         for p in notes_p:
-            notesdiv += dict_fill(self.templates[snip_template], p.meta)
+            # don't add to notes aggregate page if no-agg in meta
+            if not 'no-agg' in p.meta:
+                notesdiv += dict_fill(self.templates[snip_template], p.meta)
         
         with open(f'./html/notes.html', 'r+') as f:
             notes_html = f.read()
