@@ -127,7 +127,12 @@ class Site:
             page.write(Path("./html/"))
 
         # process agg/gallery pages (just notes rn)
-        notes_p = [p for p in self.pages if "notes" in str(p.path.parent)]
+        notes_p = sorted(
+            [p for p in self.pages if "notes" in str(p.path.parent)],
+            key=lambda p: p.meta["date"],
+            reverse=True,
+        )
+        print([f"{p.meta['date']}: {p.meta['title']}" for p in notes_p])
         notesdiv = ""
         snip_template = Path("./notes/post-snip-template.html")
         for p in notes_p:
@@ -184,6 +189,10 @@ class Page:
 
         # add path to meta
         meta["path"] = "./" + str(self.path)
+
+        # if no date, give default
+        if "date" not in meta:
+            meta["date"] = "2000-01-01"
 
         # try to get title from title tag, otherwise use file name
         try:
