@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <html>
+    <head>
+      <meta charset="utf-8" />
+      <link rel="stylesheet" href="./pres.css" />
+      <link rel="icon" type="image/png" href="/images/favicon.png" />
+
+      <title>You don't need to use AI to be a good software engineer</title>
+
+      <meta name="date" content="2026-06-19" />
+      <meta name="tags" content="[ai, presentation]" />
+    </head>
+    <body>
+      <div class="content">
+        <div id="back">
+          <a href="/index.html">&lt home </a>
+          <a href="/notes.html">&lt notes</a>
+        </div>
+
+        <h1>You don't need to use AI to be a good software engineer</h1>
+
+        <p>
+          <em>This is based on a talk I gave on
+          May 6, 2026 at the Improving Scientific Software conference. The original presentation was roughly 15 minutes in length, followed by a few minutes for questions.</em>
+        </p>
+        <p>
+          <em> You can see a <a href="https://www.youtube.com/watch?v=AkZUCV8_rHg&t=12158s">recording of the talk on youtube</a> or look at <a href="https://zenodo.org/records/19488704">a pdf of the slides</a>.</em>
+        </p>
+
+        
+        <div class="col-pres">
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-01.png" alt="Slide title: 'You don’t need to use AI to be a
+good software engineer.' subtitle: 'Improving Scientific Software Conference 2026' May 6, 2026"/>
+          </div>
+          <div class="comm">
+            <p>At my previous place of employment, like many other workplaces, AI hype was seeping in through already-existing cracks (e.g. funding shortfalls, leadership failings, etc). </p>
+            <p>About a year prior to when I presented these slides, at another workshop, I'd heard a speaker say, unchallenged, that anybody who refused to use AI should be fired for "refusing to use modern tools".  After that, I tried to give presentations at these things whenever I reasonably could that challenged the almost exclusively pro-AI viewpoints of other speakers. </p>
+            <p>I gave this presentation during my last week there.</p>
+          </div>
+        </div>
+
+        <h2> How LLMs work, very briefly </h2>
+        <p>I wanted to start with an overview of how LLMs work. This may have been too ambitious for a 15 minute presentation, but alas. Feel free to skip down the <a href="#section2">next section</a> if you're already comfortable with the general math concepts behind LLMs.</p>
+        
+        <div class="col-pres">
+          <div class="slide">
+            <span class="helper"></span>
+            <img title="slide 2" src="./slides/slide-02.png" alt="title: Other people have explained this better than I’m about to subtitle: and you should go look at their stuff later. Two video thumbnails, one for 'Large Language Models Explained Briefly' by account 3Blue1Brown, the other for 'Visualizing transformers and attention | Talk for TNG Big Tech Day '24' by account Grant Sanderson"/>
+          </div>
+          <div class="comm">
+                        <p>I have a degree in computational mathematics. This may be naïve of me, but I believe that if people had a better understanding of the math underneath LLMs, a lot of the mystery would be punctured and the inherent limitations of the technology would be more obvious. There's nothing like building your own ML model, from scratch, in Fortran 90, to break you from any illusions that these models could have any form of consciousness.</p>
+            <p>As I was looking for how other people have explained this, <a href="https://youtu.be/LPZh9BOjkQs">the explainers</a> <a href="https://youtu.be/KJtZARuO3JY">that made the most sense to me</a> were by youtuber <a href="https://www.youtube.com/c/3blue1brown">3Blue1Brown</a>.</p>
+          </div>
+
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-03.png" alt="A screenshot of the Transformer Explainer webpage and the logo of the Polo Club of Data Science at Georgia Tech"/>
+          </div>
+          <div class="comm">
+            <p>There's also <a href="https://poloclub.github.io/transformer-explainer/">this great interactive visualization</a> by The Polo Club of Data Science at Georgia Tech, my grad school alma mater, that I highly recommend playing around with.</p>
+          </div>
+
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-04.png" alt="title: 'What LLMs are doing exactly' Chat-like doodle. First bubble says 'Tell me about the python programming language', reply bubble says 'Certainly! Python is a programming language...'"/>
+          </div>
+          <div class="comm">
+            <p>But anyway, what are LLMs actually doing.</p>
+            <p>I think we're all pretty familiar with something like this--something that resembles a chat interface. You type something in, then you get some text back.</p>
+            <p>But what actually happens between those messages? How do we get from your input to the text you get back?</p>
+            
+          </div>
+
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-05.png" alt="title: 'What LLMs are doing exactly' subtitle: 'Text embedding' A sketch of a sentence, 'Tell me about the python programming language' being split into words and transformed into vectors. To the right, a diagram shows a simplified representation on 3D axes of several words, showing that the difference between 'dog' and 'dogs' could represent a 'plural' encoding and be used to get from 'cat' to 'cats'"/>
+          </div>
+          <div class="comm">
+            <p>The first thing that happens, is that your initial message is converted from text to a vector representation. It gets broken into “tokens”. I’m showing them being broken into words here, and technically a token might be part of a word or punctuation or something, but for simplicity, by word is close enough here.</p>
+            <p>Each of these tokens is a huge vector. The values in this vector are relatively inscrutable. Each one doesn't only represent the word itself, but can be used to determine the relationship between itself and other words. </p>
+          </div>
+
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-06.png" alt="title: 'What LLMs are doing exactly' subtitle: 'Text embedding'. A sketch diagram comparing the word 'python' in the sentences 'Tell me about the python programming language' vs 'Help! My pet python escaped!' The two vectors for python are shown to be the same."/>
+          </div>
+          <div class="comm">
+            <p>In the initial vector encodings, the encoding for "python" will always be the same. It will not distinguish between the python in our original prompt from the python in the sentence "Help! My pet python escaped!".</p>
+            <p>But, if you’ve ever used a chatbot, you know LLMs can clearly distinguish somehow between a pet python and the python programming language. So, how are they doing that?</p>
+          </div>
+
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-07.png" alt="title: 'What LLMs are doing exactly' subtitle: Attention. Diagram shows a block labeled 'transformer' made up of layers of attention and MLP. To the right, the vector encoding of python diverges into two distinct vectors with a more specific meaning."/>
+          </div>
+          <div class="comm">
+            <p>They're doing it with transformers, the "T" in ChatGPT. Transformer blocks are made of attention layers and multilayer perception layers.</p>
+            <p>In an attention layer, the LLM sorts out how tokens in an input relate to each other.</p>
+            <p>In our example, we could say that "programming" and "language" modify or <em>attend</em> to the python token and pet <em>attend</em> to python in the second. They provide a more specific meaning or context to what the python token should represent.</p>
+            <p>So, the original encoding of python in that huge vector encoding space is modified slightly to more closely “point to” separate meanings, a python programming language in the top case and “python pet” in the second.</p>
+            <p>This is all done by training weights and other vectors. It’s 100% matrix math that does this; that’s the purpose of the "attention layers", to refine the meaning of each token based on other tokens in the input.</p>
+          </div>
+
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-08.png" alt="title: 'What LLMs are doing exactly' subtitle: multi-layer perceptron. Same transformer diagram as previous slide on the left. On the right is a diagram of a MLP, where a group of initial circle nodes is connected to several layers of more circle nodes before eventually being reduced to an output column of nodes with the same number of nodes as the input layer."/>
+          </div>
+          <div class="comm">
+            <p>The other layers in transformers are multi-layer perceptron, or MLPs. These layers also refines the specific meanings of the vector representation of the tokens as they pass through with weighting matrices learned from the training data and softmax functions. </p>
+            <p>Then, the tokens pass through another attention layer, another MLP layer, and so on, further and further refining the original input tokens to get a really, impressively specific encoding of how all the tokens relate to each other.</p>
+            <p>And both these layers, the attention and the MLP layers, are made up of matrix multiplication and vector operations.</p>
+            <p>Definitely no “consciousness”, just math.</p>
+          </div>
+
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-09.png" alt="title: 'What are LLMs doing exactly' Diagram showing the initial prompt going through embedding, the transformer block, a prediction block, and finally coming out the other side as the LLM response"/>
+          </div>
+          <div class="comm">
+            <p>So finally, to put it all together, at the end of the transformer blocks, what we get, is a list of probabilities for the next token, which is what is used to build the “response” from the LLM.</p>
+            <p>A text input, to tokens encoded as vectors, and passed through an astonishing amount of matrix math, which, at the end, spit out what is a statistically likely next word. And that’s the bit I really want to emphasize--that LLM outputs are whatever would look statistically likely.</p>
+            <p>And, granted, that by itself is a bit nifty, that a huge pile of matrix multiplications end up outputting something comprehensible and recognizable as human language. But, what LLM responses are not is comprehensive, intelligent, or necessarily even correct, but purely statistically likely.</p>
+          </div>
+        </div>
+
+        <h2 id="section2">What follows</h2>
+
+        <div class="col-pres">
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-10.png" alt="Inherent limitations"/>
+          </div>
+          <div class="comm">
+            <p>A lot of the inherent limitations of LLMs can be clearly inferred by understanding their design.</p>
+          </div>
+
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-11.png" alt="The model will encode and reproduce incorrect and even harmful concepts. There’s no way to stop this entirely. Mitigation via human-in-the-loop training relies on exploitation. It’s easy to tell if something is obviously wrong, much, much harder to tell if something is subtlety wrong. Do you want a statistically likely stack overflow answer or do you want a good one?"/>
+          </div>
+          <div class="comm">
+            <p>Perhaps the most obvious, LLMs will encode and reproduce incorrect and even harmful concepts.</p>
+            <p>I know they won’t tell you to put glue on your pizza any more, but, if you understand the underlying technology, you can kind of see how it got there. The concept of “eating glue” isn’t exactly not something that you could find being discussed on the internet, so, eventually, an LLM determined it was statistically likely and regurgitated it.</p>
+            <p>And there’s no way to stop this entirely. It’s not like there’s a distinct “eat glue” weight that can be turned down. There’s also not a distinct “racism” dial or “sexism” dial to turn off or even a “good code” to turn up.</p>
+            <p>You can use <a href="https://www.theguardian.com/technology/article/2024/jul/06/mercy-anita-african-workers-ai-artificial-intelligence-exploitation-feeding-machine">human in</a> <a href="https://www.theguardian.com/technology/2025/sep/11/google-gemini-ai-training-humans">the loop training</a> to punish responses that have characteristics you don’t want coming out the other side and reward those you do, but you absolutely cannot completely eliminate incorrectness or harmful concepts from LLMs.</p>
+            <p>Additionally, I’m not sure if you’ve ever looked at or tried to review LLM generated code, but from my experience, what I’ve learned is that it is much, <em>much</em> harder to tell when something is subtly wrong than when it’s blatantly and obviously wrong, and that it will take significantly more effort to check if <em>every single</em> line of code is doing exactly what it says it's doing.</p>
+            <p>And finally, if you are using these tools to generate code, ask yourself, is statistically average code generated by something that does not, <em>can not</em>, hold an internal understanding of your project really code you want to sign your name to?</p>
+          </div>
+
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-12.png" alt="title: 'LLMs will reproduce training data' What’s in the training data? The entire internet. Licensing, copyright issues"/>
+          </div>
+          <div class="comm">
+            <p>Another obvious limitation is that LLMs will reproduce training data.</p>
+            <p>I can’t tell you exactly what’s in the training data, because the companies scraping all this data don’t exactly reveal that info publicly. It's everything they can get their hands on. Everything.</p>
+            <p>And, of course, this leads to obvious licensing and copyright issues.</p>
+          </div>
+
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-13.png" alt="title: 'LLMs will reproduce training data'. Figure from NYT OpenAI lawsuit, described in text."/>
+          </div>
+          <div class="comm">
+            <p>This is a figure from the NYT OpenAI lawsuit. Everything in red represents a word for word match to a NYT article that was reproduced exactly by chatgpt, If it's hard to see, most of the passage is red.</p>
+            <p>I’m aware that courts might be still deciding or whatever if this counts as “fair use”, but from a non-legal perspective, I don’t think anybody could make the argument that this isn’t professionally troublesome.</p>
+            <p>I invite you to imagine if this is some code you’ve written. Do you check every function you’ve used a chatbot to write to make sure it wasn’t pulled line for line from another major package? Would you otherwise be okay going and copying and pasting large sections from major packages like numpy or astropy?</p>
+            <p>This isn’t something that is a remote possibility, using chatbots to generate code will eventually straight up lift code from another published package, which, at minimum, should be embarrassing for whoever generated it.</p>
+          </div>
+        
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-17.png" alt="title: 'The effects' Decreases trust between software developers. Decreases trust in open source communities. Decreases trust in our institutions."/>
+          </div>
+          <div class="comm">
+            <p>Given these inherent limitations of LLMs, I think there are incredibly foreseeable consequences of integrating LLMs into our work.</p>
+            <p>It's harder to trust the work your coworkers do.</p>
+            <p>It will be harder to trust the work done by others in our broader communities.</p>
+            <p>Using these tools in public-facing areas will lead to decreased trust in us*.</p>
+
+            <p>I like to think about the failure cases here. For example, a README page I write will never say anything I didn’t put on it. Documentation pages <em>shouldn’t be able to</em> misrepresent how to actually use the tool. Integrating LLMs into things like these makes those failure cases not a possibility, but an inevitability.</p>
+
+            <p><small><em>* To my previous employer, the perception of public trust would (or should) have been very very important.</em></small></p>
+          </div>
+        </div>
+
+
+        <h2>Where we go from here</h2>
+        <div class="col-pres">
+          
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-18.png" alt="AI does not have to be inevitable, you aren’t going to fall behind if you don’t use it. Don’t use it."/>
+          </div>
+          <div class="comm">
+            <p>“AI” does not have to be inevitable. Consider who it serves to not even try to imagine a different future where these products aren’t integrated into every aspect of our jobs and lives. </p>
+            <p>Messaging about how “you’re going to be left behind” is a marketing tool. AI is interpolative. It always reproduce what’s been fed into it.</p>
+            <p>There isn’t a way to never have them return things that aren't accurate.</p>
+            <p>You aren't going to fall behind if you refuse to use AI.</p>
+            <p>Don't use it.</p>
+          </div>
+          
+          <div class="slide">
+            <span class="helper"></span>
+            <img src="./slides/slide-19.png" alt="title: 'Call to action' Demand institutions make a clear policy about employee AI usage. Heavily restrict the use of LLMs, No public LLM interfaces, No generated images in presentations/websites/newsletters, Professional and student education on AI/ML should prioritize underlying principles and ethics over how to use tools. Reframe questions from 'how should we do this' to 'should we do this'."/>
+          </div>
+          <div class="comm">
+            <p>The claim from [institutions like my old employer] that “things are moving so fast” when they decide not to make a coherent AI policy is inadequate at this point. Chat bots and image generators have been widely available for years. We need clear messaging and guidelines for their usage now.</p>
+            <p>Trust in public science is at an alarming low and it’s irresponsible to allow autonomous, or “agentic” chatbots the access we’ve already given them.</p>
+            <p>Who am I to suggest guidelines? Nobody. I shouldn’t be the one suggesting guidelines. But in the silence from our organization, we have to start with something.</p>
+            <p>Since I’m already here making suggestions, my moonshot ask for AI policies would look something like:</p>
+            <ul>
+              <li>First, heavily restrict or straight up disallow the use of LLMs for professional work, and especially on shared systems like HPCs</li>
+              <li>Next, no public LLM interfaces in documentation, databases, anything.</li>
+              <li>Also, no generated images or text in presentations, websites, newsletters etc</li>
+              <li>And in professional or student training we create, any AI education content should prioritize the underlying principles of AI/ML, not be focused on how to integrate these tools with the work we do.</li>
+            </ul>
+            <p>Finally, I want to ask that whenever faced with a question of “how do we integrate AI safely and responsibly”, that the option for refusal and rejection is always an option. Less “how should we do this” to “should we”.</p>
+          </div>
+
+          </div>        
+        </div>
+        
+        <footer class="foot">
+          ⋅.˳˳.⋅ॱ˙˙ॱ⋅ Andie Wren | 2026 |
+          <a id="feedlink" href="/feed.xml">feed</a> ⋅.˳˳.⋅ॱ˙˙ॱ⋅
+        </footer>
+      </div>
+    </body>
+  </html>
+</html>

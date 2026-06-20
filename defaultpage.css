@@ -41,6 +41,10 @@ h1 {
   font-family: "alagard"
 }
 
+small {
+  color: var(--site-green2);
+}
+
 #titlepanel {
   margin-left: auto;
   margin-right: auto;
