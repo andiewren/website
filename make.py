@@ -1,6 +1,7 @@
 # nobody can force me to write good code for my own bullshit, don't look at this
 # all bugs 100% human generated
 
+from ast import literal_eval
 import os
 import subprocess
 from pathlib import Path
@@ -169,13 +170,17 @@ class Page:
 
         # get anyting inside of meta tags
         p = re.compile(
-            r"<meta name\s?=\s?[\'\"](.*)[\'\"]\s+content\s?=\s?[\'\"](.*)[\'\"]\s*>",
+            r"<meta name\s?=\s?[\'\"](.*)[\'\"]\s+content\s?=\s?[\'\"](.*)[\'\"]\s*/>",
             re.MULTILINE,
         )
         matches = re.finditer(p, self.original)
-
         for m in matches:
-            meta[m.group(1)] = m.group(2)
+            # check to see if meta element is a list
+            if m.group(2)[0] == "[" and m.group(2)[-1] == "]":
+                meta[m.group(1)] = m.group(2).split(", ")
+            else:
+                # if not list, just shove the entire thing into the dict
+                meta[m.group(1)] = m.group(2)
 
         # add path to meta
         meta["path"] = "./" + str(self.path)
