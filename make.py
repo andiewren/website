@@ -132,7 +132,7 @@ class Site:
             key=lambda p: p.meta["date"],
             reverse=True,
         )
-        print([f"{p.meta['date']}: {p.meta['title']}" for p in notes_p])
+        # print([f"{p.meta['date']}: {p.meta['title']}" for p in notes_p])
         notesdiv = ""
         snip_template = Path("./notes/post-snip-template.html")
         for p in notes_p:
@@ -191,8 +191,10 @@ class Page:
         meta["path"] = "./" + str(self.path)
 
         # if no date, give default
-        if "date" not in meta:
+        if "date" not in meta and not "published" in meta:
             meta["date"] = "2000-01-01"
+        elif "date" not in meta and "published" in meta:
+            meta["date"] = meta["published"]
 
         # try to get title from title tag, otherwise use file name
         try:
@@ -252,6 +254,12 @@ class mdPage(Page):
 
             # get list of anything after a dash on a line
             meta[a.group(1)] = re.findall(r"\s*-\s(.*)\n", li)
+
+        # if no date, give default
+        if "date" not in meta and not "published" in meta:
+            meta["date"] = "2000-01-01"
+        elif "date" not in meta and "published" in meta:
+            meta["date"] = meta["published"]
 
         meta["path"] = re.sub(".md", ".html", "./" + str(self.path))
 
