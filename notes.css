@@ -1,5 +1,9 @@
 @import url("/defaultpage.css");
 
+.postlist {
+  /* font-family: "redalert", monospace; */
+}
+
 h2 {
   margin-top: 5px;
   margin-bottom: 5px;

@@ -3,6 +3,9 @@
 @font-face {font-family: "alagard"; src: url("/fonts/alagard.ttf");}
 @font-face {font-family: "sd"; src: url("/fonts/SD-Auto-Pilot.ttf");}
 @font-face {font-family: "slkscr"; src: url("/fonts/slkscr.ttf");}
+@font-face {font-family: "pixeloperator"; src: url("/fonts/PixelOperator.ttf");}
+@font-face {font-family: "pixeloperator"; src: url("/fonts/PixelOperator-Bold.ttf"); font-weight: bold;}
+
 
 :root {
   image-rendering: pixelated;
@@ -10,9 +13,12 @@
   --site-bg:#CFE4B8;
   --site-yellow:#F8CD77;
   --text-dark:#1d2e0f;
-  --text-hover:#90a927;
+  /* --text-hover:#90a927; */
   --site-green2: #1f5242;
   --code-block:#ddf2c5;
+  --site-lilac: #e9deff;
+  --site-purple-dark: #280b6b;
+  --site-purple: #7d5ec4;
 }
 
 /* html, body { */
@@ -25,7 +31,8 @@ html, body {
 
 body {
   display: flex;
-  flex-direction: column;  font-family: "term", monospace;
+  flex-direction: column;
+  font-family: "pixeloperator", monospace;
   font-weight: normal;
   background-color: var(--site-bg);
   color: var(--text-dark);
@@ -73,9 +80,29 @@ small {
   border-style:  solid;
 }
 
-.sticker > img{
+.sticker > img {
   position: absolute;
   z-index: -1;
+}
+
+.ad-box {
+  /* background: var(--code-block); */
+  background: var(--site-lilac);
+  outline: thick double var(--site-purple);
+  padding: 15px;
+  width: 80%;
+  margin: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.ad-box > p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  color: var(--site-purple-dark);
+  margin-left: auto;
+  margin-right: auto; 
 }
 
 .mainpanel {
@@ -87,9 +114,9 @@ a {
 }
 
 a:hover, a:focus { 
-	color: var(--text-hover);
+	color: var(--site-purple);
 	text-decoration-style: wavy;
-	text-decoration-thickness: 1px;
+	text-decoration-thickness: 1.5px;
 	background: rgb(0,0,0,0);
 
 }
@@ -124,7 +151,7 @@ a:hover, a:focus {
 .content {
   flex: 1 0 auto;
   margin: 0 auto;
-  max-width: 36em;
+  max-width: 50em;
   padding-left: 50px;
   padding-right: 50px;
   padding-top: 40px;
