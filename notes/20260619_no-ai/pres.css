@@ -36,10 +36,15 @@ h2 {
   margin: 10px;
 }
 
+.slide{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .slide img {
   max-width: 450px;
   padding: 10px;
-  vertical-align: middle;
+  max-height: 100%;
+  max-width: 97%;
 }
-
-
