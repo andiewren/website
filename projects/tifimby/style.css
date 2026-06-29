@@ -1,5 +1,10 @@
 @import url("../projects.css");
 
+body {
+  background: url(./bg.webp);
+  background-attachment: fixed;
+}
+
 /* overwrite from defaultpage.css */
 .content {
   max-width: 100%;
