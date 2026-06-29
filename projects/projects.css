@@ -1,0 +1,11 @@
+@import url("/defaultpage.css");
+
+.nav-pic:hover {
+  transform: rotate(-5deg);
+}
+
+#tifimby-link {
+  position: absolute;
+  left: 8%;
+  top: 200px;
+}
