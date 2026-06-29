@@ -10,8 +10,15 @@
   filter: drop-shadow(5px 5px var(--site-purple)) drop-shadow(1px -1px var(--site-purple)) drop-shadow(-1px 1px var(--site-purple)) drop-shadow(-1px -1px var(--site-purple))
 }
 
-.ball:hover {
+.ball:hover, .bit:hover{
   transform: rotate(-5deg);
+}
+
+#twine {
+  position: absolute;
+  top: 413px;
+  left: 254px;
+  width: 215px;
 }
 
 #toy-display {
