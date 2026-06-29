@@ -1,0 +1,47 @@
+@import url("/defaultpage.css");
+
+/* overwrite from defaultpage.css */
+.content {
+  max-width: 100%;
+}
+
+.littleguy:hover {
+  transform: rotate(-5deg);
+  filter: drop-shadow(5px 5px var(--site-purple)) drop-shadow(1px -1px var(--site-purple)) drop-shadow(-1px 1px var(--site-purple)) drop-shadow(-1px -1px var(--site-purple))
+}
+
+.ball:hover {
+  transform: rotate(-5deg);
+}
+
+#toy-display {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 60%;
+}
+
+#toy-display img, #toy-display a {
+  margin: auto;
+}
+
+#ball-display {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.littleguy, .ball {
+  padding: 5px;
+}
+
+.ball {
+  width: 260px;
+}
+
+.big-pic {
+  /* height: 875px; */
+  width: 100%;
+}

@@ -278,7 +278,7 @@ class mdPage(Page):
 
 if __name__ == "__main__":
 
-    site = Site(".", ["notes"])
+    site = Site(".", ["notes", "projects"])
     # for p in site.pages:
     #     print(str(p))
     site.build()
